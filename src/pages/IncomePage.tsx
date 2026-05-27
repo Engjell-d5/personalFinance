@@ -14,12 +14,14 @@ export function IncomePage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Transaction | undefined>();
   const [scopeFilter, setScopeFilter] = useState<Scope | "all">("all");
+  const [accountFilter, setAccountFilter] = useState("all");
   const [search, setSearch] = useState("");
 
   const { transactions, addTransaction, updateTransaction, deleteTransaction } =
     useTransactions({
       type: "income",
       scope: scopeFilter === "all" ? undefined : scopeFilter,
+      accountId: accountFilter === "all" ? undefined : accountFilter,
       search: search || undefined,
     });
 
@@ -64,6 +66,8 @@ export function IncomePage() {
       <TransactionFilters
         scope={scopeFilter}
         onScopeChange={setScopeFilter}
+        accountId={accountFilter}
+        onAccountChange={setAccountFilter}
         search={search}
         onSearchChange={setSearch}
       />
