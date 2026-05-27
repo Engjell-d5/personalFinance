@@ -8,7 +8,7 @@ export type AssetCategory =
   | "equipment"
   | "other";
 export type PropertyStatus = "occupied" | "vacant" | "maintenance";
-export type InvestmentType = "stock" | "etf" | "crypto" | "bond" | "other";
+export type InvestmentType = "stock" | "etf" | "crypto" | "bond" | "gold" | "other";
 export type MaintenanceStatus = "pending" | "in_progress" | "completed";
 export type AccountType =
   | "checking"

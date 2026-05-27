@@ -13,7 +13,15 @@
       "Bash(rm -f src/hooks/useProperties.ts src/hooks/useInvestments.ts src/pages/PropertiesPage.tsx src/pages/PropertyDetailPage.tsx src/pages/InvestmentsPage.tsx src/pages/BusinessPage.tsx)",
       "Bash(rm -rf src/components/properties src/components/investments src/components/business)",
       "Bash(gh auth *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git branch *)",
+      "Bash(gh repo *)",
+      "Bash(gh api *)",
+      "Bash(gh run *)",
+      "Bash(git push *)",
+      "Bash(node -e ' *)",
+      "Bash(gh secret *)"
     ]
   }
 }

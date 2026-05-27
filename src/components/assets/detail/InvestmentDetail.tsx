@@ -16,6 +16,7 @@ const typeColors: Record<InvestmentType, string> = {
   crypto:
     "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
   bond: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+  gold: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
   other: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
 };
 
@@ -24,6 +25,7 @@ const typeLabels: Record<InvestmentType, string> = {
   etf: "ETF",
   crypto: "Crypto",
   bond: "Bond",
+  gold: "Gold",
   other: "Other",
 };
 

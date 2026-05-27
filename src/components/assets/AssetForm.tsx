@@ -64,6 +64,7 @@ const investmentTypes: { value: InvestmentType; label: string }[] = [
   { value: "etf", label: "ETF" },
   { value: "crypto", label: "Crypto" },
   { value: "bond", label: "Bond" },
+  { value: "gold", label: "Gold" },
   { value: "other", label: "Other" },
 ];
 
