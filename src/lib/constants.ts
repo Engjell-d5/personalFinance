@@ -16,7 +16,8 @@ export const DEFAULT_CATEGORIES: Omit<Category, "createdAt">[] = [
   { id: "cat-insurance", name: "Insurance", icon: "Shield", color: "#06b6d4", type: "expense", scope: "personal", sortOrder: 8, isSystem: true },
   { id: "cat-subscriptions", name: "Subscriptions", icon: "CreditCard", color: "#6366f1", type: "expense", scope: "personal", sortOrder: 9, isSystem: true },
   { id: "cat-education", name: "Education", icon: "GraduationCap", color: "#0ea5e9", type: "expense", scope: "personal", sortOrder: 10, isSystem: true },
-  { id: "cat-personal-other", name: "Other", icon: "MoreHorizontal", color: "#737373", type: "expense", scope: "personal", sortOrder: 11, isSystem: true },
+  { id: "cat-household", name: "Household Supplies", icon: "SprayCanIcon", color: "#14b8a6", type: "expense", scope: "personal", sortOrder: 11, isSystem: true },
+  { id: "cat-personal-other", name: "Other", icon: "MoreHorizontal", color: "#737373", type: "expense", scope: "personal", sortOrder: 12, isSystem: true },
 
   // Business Expenses
   { id: "cat-biz-office", name: "Office", icon: "Building2", color: "#3b82f6", type: "expense", scope: "business", sortOrder: 1, isSystem: true },
