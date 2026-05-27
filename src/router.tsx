@@ -48,20 +48,23 @@ function lazyPage(Page: React.LazyExoticComponent<React.ComponentType>) {
   );
 }
 
-export const router = createBrowserRouter([
-  {
-    path: import.meta.env.BASE_URL,
-    element: <AppShell />,
-    children: [
-      { index: true, element: lazyPage(DashboardPage) },
-      { path: "accounts", element: lazyPage(AccountsPage) },
-      { path: "expenses", element: lazyPage(ExpensesPage) },
-      { path: "income", element: lazyPage(IncomePage) },
-      { path: "recurring", element: lazyPage(RecurringPage) },
-      { path: "assets", element: lazyPage(AssetsPage) },
-      { path: "assets/:id", element: lazyPage(AssetDetailPage) },
-      { path: "reports", element: lazyPage(ReportsPage) },
-      { path: "settings", element: lazyPage(SettingsPage) },
-    ],
-  },
-]);
+export const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <AppShell />,
+      children: [
+        { index: true, element: lazyPage(DashboardPage) },
+        { path: "accounts", element: lazyPage(AccountsPage) },
+        { path: "expenses", element: lazyPage(ExpensesPage) },
+        { path: "income", element: lazyPage(IncomePage) },
+        { path: "recurring", element: lazyPage(RecurringPage) },
+        { path: "assets", element: lazyPage(AssetsPage) },
+        { path: "assets/:id", element: lazyPage(AssetDetailPage) },
+        { path: "reports", element: lazyPage(ReportsPage) },
+        { path: "settings", element: lazyPage(SettingsPage) },
+      ],
+    },
+  ],
+  { basename: import.meta.env.BASE_URL }
+);
