@@ -71,8 +71,11 @@ export function ExpensesPage() {
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">
-            {transactions.length} expense{transactions.length !== 1 ? "s" : ""}
+          <CardTitle className="text-base flex items-center justify-between">
+            <span>{transactions.length} expense{transactions.length !== 1 ? "s" : ""}</span>
+            <span className="text-sm font-semibold tabular-nums">
+              {formatCurrency(transactions.reduce((sum, t) => sum + t.amount, 0))}
+            </span>
           </CardTitle>
         </CardHeader>
         <CardContent>

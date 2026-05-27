@@ -74,8 +74,11 @@ export function IncomePage() {
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">
-            {transactions.length} entr{transactions.length !== 1 ? "ies" : "y"}
+          <CardTitle className="text-base flex items-center justify-between">
+            <span>{transactions.length} entr{transactions.length !== 1 ? "ies" : "y"}</span>
+            <span className="text-sm font-semibold tabular-nums text-green-600 dark:text-green-400">
+              {formatCurrency(transactions.reduce((sum, t) => sum + t.amount, 0))}
+            </span>
           </CardTitle>
         </CardHeader>
         <CardContent>
