@@ -5,13 +5,15 @@ import { v4 as uuid } from "uuid";
 export async function seedDatabase() {
   const now = new Date().toISOString();
 
-  const catCount = await db.categories.count();
-  if (catCount === 0) {
-    const categories = DEFAULT_CATEGORIES.map((cat) => ({
-      ...cat,
-      createdAt: now,
-    }));
-    await db.categories.bulkAdd(categories);
+  const existingCats = await db.categories.toArray();
+  const existingIds = new Set(existingCats.map((c) => c.id));
+
+  const missing = DEFAULT_CATEGORIES
+    .filter((cat) => !existingIds.has(cat.id))
+    .map((cat) => ({ ...cat, createdAt: now }));
+
+  if (missing.length > 0) {
+    await db.categories.bulkAdd(missing);
   }
 
   const accCount = await db.accounts.count();
