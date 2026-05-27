@@ -164,6 +164,19 @@ export interface Account {
   deletedAt?: string;
 }
 
+export type BudgetPeriod = "monthly" | "yearly";
+
+export interface Budget {
+  id: string;
+  categoryId: string;
+  amount: number;
+  period: BudgetPeriod;
+  scope?: Scope;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
+}
+
 export interface SyncMeta {
   id: string;
   lastSyncTimestamp: string;

@@ -33,6 +33,7 @@ export function SettingsPage() {
       tenants: await db.tenants.toArray(),
       maintenanceRecords: await db.maintenanceRecords.toArray(),
       accounts: await db.accounts.toArray(),
+      budgets: await db.budgets.toArray(),
     };
     const json = JSON.stringify(data, null, 2);
     const blob = new Blob([json], { type: "application/json" });
@@ -56,7 +57,7 @@ export function SettingsPage() {
 
       const tables = [
         db.transactions, db.recurringRules, db.categories,
-        db.assets, db.tenants, db.maintenanceRecords, db.accounts,
+        db.assets, db.tenants, db.maintenanceRecords, db.accounts, db.budgets,
       ];
       await db.transaction("rw", tables, async () => {
         if (data.transactions) {
@@ -87,6 +88,10 @@ export function SettingsPage() {
           await db.accounts.clear();
           await db.accounts.bulkAdd(data.accounts);
         }
+        if (data.budgets) {
+          await db.budgets.clear();
+          await db.budgets.bulkAdd(data.budgets);
+        }
       });
     };
     input.click();
@@ -97,7 +102,7 @@ export function SettingsPage() {
 
     const allTables = [
       db.transactions, db.recurringRules, db.categories,
-      db.assets, db.tenants, db.maintenanceRecords, db.accounts, db.syncMeta,
+      db.assets, db.tenants, db.maintenanceRecords, db.accounts, db.budgets, db.syncMeta,
     ];
     await db.transaction("rw", allTables, async () => {
       await db.transactions.clear();
@@ -107,6 +112,7 @@ export function SettingsPage() {
       await db.tenants.clear();
       await db.maintenanceRecords.clear();
       await db.accounts.clear();
+      await db.budgets.clear();
       await db.syncMeta.clear();
     });
 

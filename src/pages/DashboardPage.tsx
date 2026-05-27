@@ -4,6 +4,7 @@ import { NetWorthCard } from "@/components/dashboard/NetWorthCard";
 import { CashFlowCard } from "@/components/dashboard/CashFlowCard";
 import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import { BudgetOverview } from "@/components/dashboard/BudgetOverview";
 
 export function DashboardPage() {
   const data = useDashboard();
@@ -50,6 +51,8 @@ export function DashboardPage() {
         </div>
         <QuickActions />
       </div>
+
+      <BudgetOverview />
     </div>
   );
 }

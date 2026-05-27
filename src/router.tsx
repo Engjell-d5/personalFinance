@@ -17,6 +17,9 @@ const IncomePage = lazy(() =>
 const RecurringPage = lazy(() =>
   import("@/pages/RecurringPage").then((m) => ({ default: m.RecurringPage }))
 );
+const BudgetsPage = lazy(() =>
+  import("@/pages/BudgetsPage").then((m) => ({ default: m.BudgetsPage }))
+);
 const AssetsPage = lazy(() =>
   import("@/pages/AssetsPage").then((m) => ({ default: m.AssetsPage }))
 );
@@ -59,6 +62,7 @@ export const router = createBrowserRouter(
         { path: "expenses", element: lazyPage(ExpensesPage) },
         { path: "income", element: lazyPage(IncomePage) },
         { path: "recurring", element: lazyPage(RecurringPage) },
+        { path: "budgets", element: lazyPage(BudgetsPage) },
         { path: "assets", element: lazyPage(AssetsPage) },
         { path: "assets/:id", element: lazyPage(AssetDetailPage) },
         { path: "reports", element: lazyPage(ReportsPage) },

@@ -7,6 +7,7 @@ import type {
   Tenant,
   MaintenanceRecord,
   Account,
+  Budget,
   SyncMeta,
 } from "@/lib/types";
 
@@ -18,6 +19,7 @@ export class FinanceDB extends Dexie {
   tenants!: Table<Tenant>;
   maintenanceRecords!: Table<MaintenanceRecord>;
   accounts!: Table<Account>;
+  budgets!: Table<Budget>;
   syncMeta!: Table<SyncMeta>;
 
   constructor() {
@@ -153,6 +155,19 @@ export class FinanceDB extends Dexie {
           }
         }
       });
+
+    this.version(5).stores({
+      transactions:
+        "id, date, categoryId, type, scope, assetId, accountId, [scope+type], [date+type]",
+      recurringRules: "id, nextDueDate, isActive",
+      categories: "id, type, scope, parentId, sortOrder",
+      assets: "id, category, scope, isActive",
+      tenants: "id, assetId, isActive",
+      maintenanceRecords: "id, assetId, date, status",
+      accounts: "id, type, isActive",
+      budgets: "id, categoryId, period",
+      syncMeta: "id",
+    });
   }
 }
 

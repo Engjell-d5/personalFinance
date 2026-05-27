@@ -18,6 +18,7 @@ interface SyncPayload {
     tenants: AnyRecord[];
     maintenanceRecords: AnyRecord[];
     accounts: AnyRecord[];
+    budgets: AnyRecord[];
   };
 }
 
@@ -75,6 +76,7 @@ async function exportDatabase(): Promise<SyncPayload> {
     tenants,
     maintenanceRecords,
     accounts,
+    budgets,
   ] = await Promise.all([
     db.transactions.toArray(),
     db.recurringRules.toArray(),
@@ -83,6 +85,7 @@ async function exportDatabase(): Promise<SyncPayload> {
     db.tenants.toArray(),
     db.maintenanceRecords.toArray(),
     db.accounts.toArray(),
+    db.budgets.toArray(),
   ]);
 
   return {
@@ -97,6 +100,7 @@ async function exportDatabase(): Promise<SyncPayload> {
       tenants,
       maintenanceRecords,
       accounts,
+      budgets,
     },
   };
 }
@@ -143,6 +147,7 @@ function mergePayloads(local: SyncPayload, remote: SyncPayload): SyncPayload {
       tenants: mergeRecords(local.data.tenants, remote.data.tenants),
       maintenanceRecords: mergeRecords(local.data.maintenanceRecords, remote.data.maintenanceRecords),
       accounts: mergeRecords(local.data.accounts ?? [], remote.data.accounts ?? []),
+      budgets: mergeRecords(local.data.budgets ?? [], remote.data.budgets ?? []),
     },
   };
 }
@@ -156,6 +161,7 @@ async function importDatabase(payload: SyncPayload): Promise<void> {
     db.tenants,
     db.maintenanceRecords,
     db.accounts,
+    db.budgets,
   ];
 
   await db.transaction("rw", tables, async () => {
@@ -166,6 +172,7 @@ async function importDatabase(payload: SyncPayload): Promise<void> {
     await db.tenants.clear();
     await db.maintenanceRecords.clear();
     await db.accounts.clear();
+    await db.budgets.clear();
 
     await db.transactions.bulkAdd(payload.data.transactions);
     await db.recurringRules.bulkAdd(payload.data.recurringRules);
@@ -175,6 +182,9 @@ async function importDatabase(payload: SyncPayload): Promise<void> {
     await db.maintenanceRecords.bulkAdd(payload.data.maintenanceRecords);
     if (payload.data.accounts) {
       await db.accounts.bulkAdd(payload.data.accounts);
+    }
+    if (payload.data.budgets) {
+      await db.budgets.bulkAdd(payload.data.budgets);
     }
   });
 }

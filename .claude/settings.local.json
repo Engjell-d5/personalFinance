@@ -21,7 +21,8 @@
       "Bash(gh run *)",
       "Bash(git push *)",
       "Bash(node -e ' *)",
-      "Bash(gh secret *)"
+      "Bash(gh secret *)",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\hp\\\\Documents\\\\projects\\\\personalFinance\\\\src\\\\components\\\\budgets\")"
     ]
   }
 }
