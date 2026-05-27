@@ -1,9 +1,11 @@
 import { NavLink } from "react-router";
 import { cn } from "@/lib/utils";
-import { X, Wallet, BarChart3, Settings } from "lucide-react";
+import { X, Wallet, Repeat, Target, BarChart3, Settings } from "lucide-react";
 
 const sheetNavItems = [
   { to: "/accounts", icon: Wallet, label: "Accounts" },
+  { to: "/recurring", icon: Repeat, label: "Recurring" },
+  { to: "/budgets", icon: Target, label: "Budgets" },
   { to: "/reports", icon: BarChart3, label: "Reports" },
   { to: "/settings", icon: Settings, label: "Settings" },
 ];
