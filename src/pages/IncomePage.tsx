@@ -15,6 +15,7 @@ export function IncomePage() {
   const [editing, setEditing] = useState<Transaction | undefined>();
   const [scopeFilter, setScopeFilter] = useState<Scope | "all">("all");
   const [accountFilter, setAccountFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [search, setSearch] = useState("");
 
   const { transactions, addTransaction, updateTransaction, deleteTransaction } =
@@ -22,6 +23,7 @@ export function IncomePage() {
       type: "income",
       scope: scopeFilter === "all" ? undefined : scopeFilter,
       accountId: accountFilter === "all" ? undefined : accountFilter,
+      categoryId: categoryFilter === "all" ? undefined : categoryFilter,
       search: search || undefined,
     });
 
@@ -68,6 +70,9 @@ export function IncomePage() {
         onScopeChange={setScopeFilter}
         accountId={accountFilter}
         onAccountChange={setAccountFilter}
+        categoryId={categoryFilter}
+        onCategoryChange={setCategoryFilter}
+        categories={categories}
         search={search}
         onSearchChange={setSearch}
       />
