@@ -70,18 +70,26 @@ export function BudgetsPage() {
   const existingCategoryIds = budgets.map((b) => b.categoryId);
 
   const summary = useMemo(() => {
-    let totalBudgeted = 0;
-    let totalSpent = 0;
+    let totalBudgetedMonthly = 0;
+    let totalSpentMonthly = 0;
     let overBudgetCount = 0;
 
     for (const budget of budgets) {
-      totalBudgeted += budget.amount;
+      const monthlyAmount = budget.period === "yearly" ? budget.amount / 12 : budget.amount;
+      totalBudgetedMonthly += monthlyAmount;
+
       const spent = getSpent(budget);
-      totalSpent += spent;
+      const monthlySpent = budget.period === "yearly" ? spent / 12 : spent;
+      totalSpentMonthly += monthlySpent;
+
       if (spent > budget.amount) overBudgetCount++;
     }
 
-    return { totalBudgeted, totalSpent, overBudgetCount };
+    return {
+      totalBudgeted: totalBudgetedMonthly,
+      totalSpent: totalSpentMonthly,
+      overBudgetCount,
+    };
   }, [budgets, monthlyTransactions, yearlyTransactions]);
 
   function handleAdd(data: {
@@ -133,7 +141,7 @@ export function BudgetsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card>
             <CardContent className="p-4">
-              <p className="text-xs text-muted-foreground">Total Budgeted</p>
+              <p className="text-xs text-muted-foreground">Budgeted / month</p>
               <p className="text-lg font-semibold">
                 {formatCurrency(summary.totalBudgeted)}
               </p>
@@ -141,7 +149,7 @@ export function BudgetsPage() {
           </Card>
           <Card>
             <CardContent className="p-4">
-              <p className="text-xs text-muted-foreground">Total Spent</p>
+              <p className="text-xs text-muted-foreground">Spent / month</p>
               <p className="text-lg font-semibold">
                 {formatCurrency(summary.totalSpent)}
               </p>
