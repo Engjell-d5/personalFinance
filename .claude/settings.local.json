@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npx create-vite@6 . -- --template react-ts)",
+      "Bash(npx create-vite@6 . --template react-ts)",
+      "Bash(npm install *)",
+      "Bash(npx shadcn@latest add button card input label select table tabs dialog sheet badge separator dropdown-menu scroll-area textarea popover calendar toast sonner --yes)",
+      "Bash(npx tsc *)",
+      "Bash(npx vite *)",
+      "Bash(git init *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(rm -f src/hooks/useProperties.ts src/hooks/useInvestments.ts src/pages/PropertiesPage.tsx src/pages/PropertyDetailPage.tsx src/pages/InvestmentsPage.tsx src/pages/BusinessPage.tsx)",
+      "Bash(rm -rf src/components/properties src/components/investments src/components/business)",
+      "Bash(gh auth *)",
+      "Bash(git add *)"
+    ]
+  }
+}
