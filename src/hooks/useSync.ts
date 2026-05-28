@@ -12,6 +12,7 @@ import {
   signIn as googleSignIn,
   signOut as googleSignOut,
   isSignedIn,
+  trySilentSignIn,
 } from "@/services/google-auth";
 
 type SyncStatus = "idle" | "syncing" | "success" | "error" | "offline";
@@ -33,10 +34,14 @@ export function useSync() {
 
   useEffect(() => {
     loadGsi()
-      .then(() => {
+      .then(async () => {
         initAuth();
         setGsiReady(true);
-        setConnected(isSignedIn());
+        const reconnected = await trySilentSignIn();
+        setConnected(reconnected || isSignedIn());
+        if (reconnected) {
+          sync();
+        }
       })
       .catch(() => {
         setGsiReady(false);

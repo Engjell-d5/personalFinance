@@ -10,13 +10,38 @@ import { useCategories } from "@/hooks/useCategories";
 import { formatCurrency } from "@/lib/format";
 import type { Transaction, Scope } from "@/lib/types";
 
+function getDateRange(period: string): { startDate?: string; endDate?: string } {
+  if (period === "all") return {};
+  if (period.startsWith("month:")) {
+    const ym = period.slice(6);
+    const [year, month] = ym.split("-").map(Number);
+    const start = `${year}-${String(month).padStart(2, "0")}-01`;
+    const lastDay = new Date(year!, month!, 0).getDate();
+    const end = `${year}-${String(month).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+    return { startDate: start, endDate: end };
+  }
+  if (period.startsWith("year:")) {
+    const year = period.slice(5);
+    return { startDate: `${year}-01-01`, endDate: `${year}-12-31` };
+  }
+  return {};
+}
+
+function defaultPeriod(): string {
+  const now = new Date();
+  return `month:${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
 export function ExpensesPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Transaction | undefined>();
   const [scopeFilter, setScopeFilter] = useState<Scope | "all">("all");
   const [accountFilter, setAccountFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [periodFilter, setPeriodFilter] = useState(defaultPeriod());
   const [search, setSearch] = useState("");
+
+  const dateRange = useMemo(() => getDateRange(periodFilter), [periodFilter]);
 
   const { transactions, addTransaction, updateTransaction, deleteTransaction } =
     useTransactions({
@@ -24,18 +49,12 @@ export function ExpensesPage() {
       scope: scopeFilter === "all" ? undefined : scopeFilter,
       accountId: accountFilter === "all" ? undefined : accountFilter,
       categoryId: categoryFilter === "all" ? undefined : categoryFilter,
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
       search: search || undefined,
     });
 
   const categories = useCategories("expense");
-
-  const totalThisMonth = useMemo(() => {
-    const now = new Date();
-    const monthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-    return transactions
-      .filter((t) => t.date.startsWith(monthPrefix))
-      .reduce((sum, t) => sum + t.amount, 0);
-  }, [transactions]);
 
   function handleEdit(transaction: Transaction) {
     setEditing(transaction);
@@ -50,12 +69,7 @@ export function ExpensesPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Expenses</h1>
-          <p className="text-muted-foreground text-sm mt-0.5">
-            This month: <span className="font-semibold text-foreground">{formatCurrency(totalThisMonth)}</span>
-          </p>
-        </div>
+        <h1 className="text-2xl font-bold tracking-tight">Expenses</h1>
         <Button onClick={() => setFormOpen(true)} size="sm">
           <Plus className="h-4 w-4 mr-1" />
           Add Expense
@@ -70,6 +84,8 @@ export function ExpensesPage() {
         categoryId={categoryFilter}
         onCategoryChange={setCategoryFilter}
         categories={categories}
+        period={periodFilter}
+        onPeriodChange={setPeriodFilter}
         search={search}
         onSearchChange={setSearch}
       />

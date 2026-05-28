@@ -18,8 +18,45 @@ interface TransactionFiltersProps {
   categoryId: string;
   onCategoryChange: (categoryId: string) => void;
   categories: Category[];
+  period: string;
+  onPeriodChange: (period: string) => void;
   search: string;
   onSearchChange: (search: string) => void;
+}
+
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+function getPeriodOptions() {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const options: { value: string; label: string }[] = [
+    { value: "all", label: "All Time" },
+    { value: `month:${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`, label: "This Month" },
+    { value: `year:${currentYear}`, label: "This Year" },
+  ];
+
+  for (let i = 1; i <= 11; i++) {
+    let m = currentMonth - i;
+    let y = currentYear;
+    while (m < 0) { m += 12; y -= 1; }
+    options.push({
+      value: `month:${y}-${String(m + 1).padStart(2, "0")}`,
+      label: `${MONTHS[m]} ${y}`,
+    });
+  }
+
+  for (let i = 1; i <= 3; i++) {
+    options.push({
+      value: `year:${currentYear - i}`,
+      label: `Year ${currentYear - i}`,
+    });
+  }
+
+  return options;
 }
 
 export function TransactionFilters({
@@ -30,10 +67,13 @@ export function TransactionFilters({
   categoryId,
   onCategoryChange,
   categories,
+  period,
+  onPeriodChange,
   search,
   onSearchChange,
 }: TransactionFiltersProps) {
   const { accounts } = useAccounts();
+  const periodOptions = getPeriodOptions();
 
   return (
     <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
@@ -46,6 +86,18 @@ export function TransactionFilters({
           className="pl-9"
         />
       </div>
+      <Select value={period} onValueChange={onPeriodChange}>
+        <SelectTrigger className="w-full sm:w-40">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {periodOptions.map((opt) => (
+            <SelectItem key={opt.value} value={opt.value}>
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <Select value={scope} onValueChange={(v) => onScopeChange(v as Scope | "all")}>
         <SelectTrigger className="w-full sm:w-36">
           <SelectValue />

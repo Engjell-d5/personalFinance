@@ -28,6 +28,7 @@ interface TokenClient {
 }
 
 const SCOPES = "https://www.googleapis.com/auth/drive.appdata";
+const CONNECTED_KEY = "pf-google-connected";
 
 let tokenClient: TokenClient | null = null;
 let accessToken: string | null = null;
@@ -41,6 +42,10 @@ function getClientId(): string {
 
 function isGsiLoaded(): boolean {
   return !!window.google?.accounts?.oauth2;
+}
+
+export function wasPreviouslyConnected(): boolean {
+  return localStorage.getItem(CONNECTED_KEY) === "true";
 }
 
 export function loadGsi(): Promise<void> {
@@ -78,7 +83,7 @@ export function initAuth(): void {
   });
 }
 
-export function signIn(): Promise<string> {
+export function signIn(options: { silent?: boolean } = {}): Promise<string> {
   return new Promise((resolve, reject) => {
     if (!isGsiLoaded()) {
       reject(new Error("Google Identity Services not loaded"));
@@ -95,6 +100,7 @@ export function signIn(): Promise<string> {
         }
         accessToken = response.access_token;
         tokenExpiry = Date.now() + response.expires_in * 1000;
+        localStorage.setItem(CONNECTED_KEY, "true");
         resolve(response.access_token);
       },
       error_callback: (error) => {
@@ -102,8 +108,18 @@ export function signIn(): Promise<string> {
       },
     });
 
-    tokenClient.requestAccessToken({ prompt: "" });
+    tokenClient.requestAccessToken({ prompt: options.silent ? "none" : "" });
   });
+}
+
+export async function trySilentSignIn(): Promise<boolean> {
+  if (!wasPreviouslyConnected()) return false;
+  try {
+    await signIn({ silent: true });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export async function getAccessToken(): Promise<string> {
@@ -123,6 +139,7 @@ export function signOut(): void {
   accessToken = null;
   tokenExpiry = 0;
   tokenClient = null;
+  localStorage.removeItem(CONNECTED_KEY);
 }
 
 export function isSignedIn(): boolean {
