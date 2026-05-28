@@ -14,6 +14,7 @@ export function SettingsPage() {
   const {
     status,
     connected,
+    wasConnected,
     gsiReady,
     passphraseSet,
     connect,
@@ -138,6 +139,7 @@ export function SettingsPage() {
           <GoogleSignInButton
             connected={connected}
             gsiReady={gsiReady}
+            wasConnected={wasConnected}
             onConnect={connect}
             onDisconnect={disconnect}
           />

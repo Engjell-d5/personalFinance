@@ -13,14 +13,18 @@ import {
   signOut as googleSignOut,
   isSignedIn,
   trySilentSignIn,
+  wasPreviouslyConnected,
 } from "@/services/google-auth";
 
 type SyncStatus = "idle" | "syncing" | "success" | "error" | "offline";
+
+let silentAttempted = false;
 
 export function useSync() {
   const [status, setStatus] = useState<SyncStatus>(getSyncStatus());
   const [message, setMessage] = useState<string>();
   const [connected, setConnected] = useState(false);
+  const [wasConnected, setWasConnected] = useState(wasPreviouslyConnected());
   const [gsiReady, setGsiReady] = useState(false);
   const [passphraseSet, setPassphraseSet] = useState(hasPassphrase());
 
@@ -37,10 +41,19 @@ export function useSync() {
       .then(async () => {
         initAuth();
         setGsiReady(true);
-        const reconnected = await trySilentSignIn();
-        setConnected(reconnected || isSignedIn());
-        if (reconnected) {
-          sync();
+
+        if (isSignedIn()) {
+          setConnected(true);
+          return;
+        }
+
+        if (!silentAttempted && wasPreviouslyConnected()) {
+          silentAttempted = true;
+          const ok = await trySilentSignIn();
+          if (ok) {
+            setConnected(true);
+            sync();
+          }
         }
       })
       .catch(() => {
@@ -52,6 +65,7 @@ export function useSync() {
     try {
       await googleSignIn();
       setConnected(true);
+      setWasConnected(true);
     } catch {
       setConnected(false);
     }
@@ -60,6 +74,7 @@ export function useSync() {
   const disconnect = useCallback(() => {
     googleSignOut();
     setConnected(false);
+    setWasConnected(false);
   }, []);
 
   const setPassphrase = useCallback((passphrase: string) => {
@@ -75,6 +90,7 @@ export function useSync() {
     status,
     message,
     connected,
+    wasConnected,
     gsiReady,
     passphraseSet,
     connect,
